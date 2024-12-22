@@ -1,8 +1,10 @@
 import React from 'react';
-import { useGetUsersQuery } from '../RTK/userApi';
+import { useDeleteUserMutation, useGetUsersQuery } from '../RTK/userApi';
+import { Link } from 'react-router-dom';
 
 const Users = () => {
     const { data: users, isLoading, isError, isSuccess, error } = useGetUsersQuery();
+    const [deleteUser] =  useDeleteUserMutation()
 
     if (isLoading) {
         return <h3 className="text-center text-xl font-semibold text-gray-600">Loading...</h3>;
@@ -29,8 +31,12 @@ const Users = () => {
                         <h4 className="text-lg font-bold text-gray-800">{user.name}</h4>
                         <p className="text-sm text-gray-500">{user.email}</p>
                         <div className='flex gap-10'>
-                            <button className='bg-green-300 px-2 rounded-md mt-4 mb-2'>edit</button>
-                            <button className='bg-red-300 px-2 rounded-md mt-4 mb-2'>delete</button>
+                            <button className='bg-green-300 px-2 rounded-md mt-4 mb-2'>
+                                <Link to={`/edit/${user.id}`}>edit</Link>
+                                </button>
+                            <button className='bg-red-300 px-2 rounded-md mt-4 mb-2
+                            ' onClick={()=>deleteUser(user.id)}>
+                                delete</button>
                         </div>
                     </div>
                 ))
